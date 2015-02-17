@@ -9,6 +9,7 @@ This Project is Starter Kit for Peridot.
 1. Easy installation
 2. Simple reporter (No StackTrace)
 3. Easy Code coverage
+4. Simple Assert
 
 ## Requirements
 
