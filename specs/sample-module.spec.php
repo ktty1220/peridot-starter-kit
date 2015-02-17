@@ -1,10 +1,10 @@
 <?php
+namespace Peridot\Easy\Test;
 require_once(__DIR__. '/../src/sample-module.php');
-use Peridot\Leo\Interfaces\Assert;
 
 describe('Sample Module', function() {
   beforeEach(function() {
-    $this->module = new SampleModule('hoge');
+    $this->module = new \SampleModule('hoge');
   });
 
   afterEach(function() {
@@ -14,14 +14,12 @@ describe('Sample Module', function() {
   context('when using a context', function() {
     describe('hello()', function() {
       it('should return "hello <name>"', function() {
-        $assert = new Assert();
-        $assert->strictEqual($this->module->hello(), 'hello hoge');
+        assert()->strictEqual($this->module->hello(), 'hello hoge');
       });
     });
 
     xdescribe('this test is pending', function() {
       it('bye() <not implement>', function() {
-        $assert = new Assert();
         expect($this->module->bye())->to->equal('bye hoge');
       });
     });

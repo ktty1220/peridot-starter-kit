@@ -14,7 +14,7 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
    */
   public function init() {
     if (strpos(PHP_OS, 'WIN') !== false) {
-      $this->symbols['check'] = 'Ú';
+      $this->symbols['check'] = '/';
     }
     $this->colors['file'] = ['left' => "\033[33m", 'right' => "\033[39m"];
     parent::init();

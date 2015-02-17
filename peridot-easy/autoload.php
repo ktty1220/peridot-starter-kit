@@ -44,3 +44,4 @@ function main() {
 }
 
 main();
+require(__DIR__. '/assert.php');

@@ -96,7 +96,7 @@ $ vendor/bin/peridot -r easy --coverage-html report --coverage-blacklist peridot
 
 `vendor` directory will be excluded from coverage report.
 
-> You can use `-B` option instead of `--coverage-blacklist`
+> You can use `-B` option instead of `--coverage-blacklist`.
 
 This option can be used more than one times.
 
@@ -112,9 +112,40 @@ $ vendor/bin/peridot -r easy --coverage-html report -B . --coverage-whitelist sr
 
 `src` directory only will be included in coverage report.
 
-> You can use `-W` option instead of `--coverage-whitelist`
+> You can use `-W` option instead of `--coverage-whitelist`.
+
+## Simple Assert
+
+### Before
+
+```php
+use Peridot\Leo\Interfaces\Assert;
+
+describe('example test', function() {
+  it('shoud return 1', function() {
+    $assert = new Assert();  // <= need "new Assert()" on every test
+    $assert->strictEqual(hoge(), 1);
+  });
+});
+```
+
+### After
+
+```php
+namespace Peridot\Easy\Test;  // <= use Peridot\Easy\Test namespace
+
+describe('example test', function() {
+  it('shoud return 1', function() {
+    assert()->strictEqual(hoge(), 1);  // <= no need to call "new Assert()"
+  });
+});
+```
 
 ## Changelog
+
+### 0.1.1 (2015-02-17)
+
+* Added Simple Assert
 
 ### 0.1.0 (2015-02-13)
 
