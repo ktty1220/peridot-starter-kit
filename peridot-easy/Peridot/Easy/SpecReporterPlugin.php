@@ -31,8 +31,8 @@ class SpecReporterPlugin {
    */
   public function onPeridotReporters(InputInterface $input, ReporterFactory $reporters) {
     $reporters->register(
-      'easy',
-      'spec reporter on gulp-easy-peridot',
+      'fancy',
+      'fancy spec reporter on gulp-peridot-easy',
       'Peridot\Easy\SpecReporter'
     );
   }

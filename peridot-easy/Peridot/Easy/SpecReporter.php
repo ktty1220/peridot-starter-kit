@@ -13,9 +13,26 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
    * @return void
    */
   public function init() {
-    $this->symbols['check'] = 'o';
+    $this->symbols['check'] = '( ^-^)b';
+    $this->symbols['warning'] = '(/-_-)/';
+    $this->symbols['error'] = '(>\'A`)>';
     $this->colors['file'] = ['left' => "\033[33m", 'right' => "\033[39m"];
     parent::init();
+  }
+
+  /**
+   * Convert output encoding
+   *
+   * @return void
+   */
+  protected function convertEncoding($str) {
+    $config = $this->configuration;
+    if (! isset($config->inputEncoding) && ! isset($config->outputEncoding)) {
+      return $str;
+    }
+    $iEnc = ($config->inputEncoding) ?: 'auto';
+    $oEnc = ($config->outputEncoding) ?:  mb_internal_encoding();
+    return mb_convert_encoding($str, $oEnc, $iEnc);
   }
 
   /**
@@ -28,15 +45,29 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
   protected function outputError($errorNumber, TestInterface $test, $exception) {
     $this->output->writeln(sprintf(
       "  %d)%s:",
-      $errorNumber, $test->getTitle()
+      $errorNumber,
+      $this->convertEncoding($test->getTitle())
     ));
+
     $message = sprintf(
-      "     %s",
-      str_replace(PHP_EOL, PHP_EOL . "     ", $exception->getMessage()
-    ));
+      "     %s", str_replace(PHP_EOL, PHP_EOL. "     ", $this->convertEncoding($exception->getMessage()))
+    );
     $this->output->writeln($this->color('error', $message));
     $this->output->writeln('');
   }
+
+  /**
+   * @param Test $test
+   */
+  public function onTestPassed(Test $test) {
+    $this->output->writeln(sprintf(
+      "  %s%s %s",
+      $this->indent(),
+      $this->color('success', $this->symbol('check')),
+      $this->color('muted', $this->convertEncoding($test->getDescription()))
+    ));
+  }
+
 
   /**
    * @param Test $test
@@ -46,8 +77,10 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
       "  %s%s",
       $this->indent(),
       $this->color('error', sprintf(
-        "x %d) %s",
-        count($this->errors), $test->getDescription()
+        "%s %d) %s",
+        $this->symbols['error'],
+        count($this->errors),
+        $this->convertEncoding($test->getDescription())
       ))
     ));
   }
@@ -57,10 +90,11 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
    */
   public function onTestPending(Test $test) {
     $this->output->writeln(sprintf(
-      $this->color('pending', "  %s- %s"),
-        $this->indent(),
-        $test->getDescription()
-      ));
+      $this->color('pending', "  %s%s %s"),
+      $this->indent(),
+      $this->symbols['warning'],
+      $this->convertEncoding($test->getDescription())
+    ));
   }
 
   /**
@@ -73,7 +107,12 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
       if ($suite->getParent() === $this->root) {
         $file = $this->color('file', ' ['. basename($suite->getFile()). ']');
       }
-      $this->output->writeln(sprintf('%s%s%s', $this->indent(), $suite->getDescription(), $file));
+      $this->output->writeln(sprintf(
+        '%s%s%s',
+        $this->indent(),
+        $this->convertEncoding($suite->getDescription()),
+        $this->convertEncoding($file)
+      ));
     }
   }
 }

@@ -1,10 +1,13 @@
 <?php
 namespace Peridot\Easy\Test;
+
 require_once(__DIR__. '/../src/sample-module.php');
+
+use Peridot\Test\Example\SampleModule;
 
 describe('Sample Module', function() {
   beforeEach(function() {
-    $this->module = new \SampleModule('hoge');
+    $this->module = new SampleModule('hoge');
   });
 
   afterEach(function() {

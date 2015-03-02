@@ -21,6 +21,8 @@ return function(EventEmitterInterface $emitter) {
     }
     $configure = require_once($bsfile);
     // 2nd argument is "load from peridot-easy" flag
-    $configure($emitter, true);
+    if (is_callable($configure)) {
+      $configure($emitter, true);
+    }
   }
 };
