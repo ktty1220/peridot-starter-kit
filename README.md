@@ -7,7 +7,7 @@ This Project is Starter Kit for Peridot.
 ## Features
 
 1. Easy installation
-2. Simple reporter (No StackTrace)
+2. Comical face reporter (No StackTrace)
 3. Easy Code coverage
 4. Simple Assert
 
@@ -62,27 +62,22 @@ $ vendor/bin/peridot
           .
 ```
 
-### Simple 'easy' reporter
+### 'face' reporter
 
 StackTrace suppressed.
 
 ```sh
-$ vendor/bin/peridot -r easy
-  this test will fail
-    1) this will not pass!! OMG
-
-  1 failing
-
-  1) this will not pass!! OMG:
-     this is bad
+$ vendor/bin/peridot -r face
 ```
+
+![ss](ss.png)
 
 ## How to Code coverage
 
 ### Basic
 
 ```sh
-$ vendor/bin/peridot -r easy --coverage-html report
+$ vendor/bin/peridot -r face --coverage-html report
 ```
 
 Generate coverage report into `report` directory.
@@ -92,7 +87,7 @@ Generate coverage report into `report` directory.
 ### Exclude specified file/directory from Code coverage
 
 ```sh
-$ vendor/bin/peridot -r easy --coverage-html report --coverage-blacklist peridot-easy
+$ vendor/bin/peridot -r face --coverage-html report --coverage-blacklist peridot-easy
 ```
 
 `vendor` directory will be excluded from coverage report.
@@ -102,13 +97,13 @@ $ vendor/bin/peridot -r easy --coverage-html report --coverage-blacklist peridot
 This option can be used more than one times.
 
 ```sh
-$ vendor/bin/peridot -r easy --coverage-html report -B peridot-easy -B peridot.php -B foo -B bar.php
+$ vendor/bin/peridot -r face --coverage-html report -B peridot-easy -B peridot.php -B foo -B bar.php
 ```
 
 ### Include specified file/directory to Code coverage
 
 ```sh
-$ vendor/bin/peridot -r easy --coverage-html report -B . --coverage-whitelist src
+$ vendor/bin/peridot -r face --coverage-html report -B . --coverage-whitelist src
 ```
 
 `src` directory only will be included in coverage report.
