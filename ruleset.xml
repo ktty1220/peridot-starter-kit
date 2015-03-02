@@ -13,12 +13,12 @@
     <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
   </rule>
   <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
-	<rule ref="Generic.WhiteSpace.ScopeIndent">
-		<properties>
-			<property name="indent" value="2"/>
-			<property name="tabIndent" value="false"/>
-		</properties>
-	</rule>
+  <rule ref="Generic.WhiteSpace.ScopeIndent">
+    <properties>
+      <property name="indent" value="2"/>
+      <property name="tabIndent" value="false"/>
+    </properties>
+  </rule>
   <rule ref="Generic.Files.LineEndings">
     <properties>
       <property name="eolChar" value="\n"/>
