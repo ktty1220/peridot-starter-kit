@@ -142,16 +142,6 @@ describe('example test', function() {
 });
 ```
 
-## Changelog
-
-### 0.1.1 (2015-02-17)
-
-* Added Simple Assert
-
-### 0.1.0 (2015-02-13)
-
-* First release
-
 ## License
 
 [MIT license](http://www.opensource.org/licenses/mit-license)
