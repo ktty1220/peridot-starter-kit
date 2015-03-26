@@ -19,10 +19,11 @@ This Project is Starter Kit for Peridot.
 ## Install
 
 ```sh
-$ git clone git://github.com/ktty1220/peridot-starter-kit.git
+$ git clone https://github.com/ktty1220/peridot-starter-kit.git
 $ cd peridot-starter-kit
 $ composer install
 $ vendor/bin/peridot --help
+$ vendor/bin/peridot
 ```
 
 ### Directories

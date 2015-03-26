@@ -3,7 +3,7 @@ require_once(__DIR__. '/autoload.php');
 
 use Evenement\EventEmitterInterface;
 use Peridot\Easy\CodeCoverage;
-use Peridot\Easy\SpecReporterPlugin;
+use Peridot\Easy\FaceReporterPlugin;
 
 return function(EventEmitterInterface $emitter) {
   //exclude coverage from hhvm because its pretty flawed at the moment
@@ -11,7 +11,7 @@ return function(EventEmitterInterface $emitter) {
     (new CodeCoverage($emitter))->register();
   }
 
-  new SpecReporterPlugin($emitter);
+  new FaceReporterPlugin($emitter);
 
   $bootstrap = getenv('PERIDOT_BOOTSTRAP');
   if (! empty($bootstrap)) {

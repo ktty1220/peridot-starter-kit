@@ -37,8 +37,12 @@ class CodeCoverage {
    * @var Code coverage report directory
    */
   private $reportDir = [
-    'html' => null,
-    'clover' => null
+    'HTML' => null,
+    'XML' => null,
+    'Clover' => null,
+    'PHP' => null,
+    'Crap4j' => null,
+    'Text' => null
   ];
 
   /**
@@ -57,10 +61,10 @@ class CodeCoverage {
    * @return $this
    */
   public function register() {
-    $this->emitter->on('peridot.start', [$this, 'onPeridotStart']);
-    $this->emitter->on('peridot.execute', [$this, 'onPeridotExecute']);
-    $this->emitter->on('runner.start', [$this, 'onRunnerStart']);
-    $this->emitter->on('runner.end', [$this, 'onRunnerEnd']);
+    $this->emitter->on('peridot.start', [ $this, 'onPeridotStart' ]);
+    $this->emitter->on('peridot.execute', [ $this, 'onPeridotExecute' ]);
+    $this->emitter->on('runner.start', [ $this, 'onRunnerStart' ]);
+    $this->emitter->on('runner.end', [ $this, 'onRunnerEnd' ]);
     return $this;
   }
 
@@ -71,24 +75,24 @@ class CodeCoverage {
    */
   public function onPeridotStart(Environment $env) {
     $def = $env->getDefinition();
-    $def->option(
-      'coverage-html', null, InputOption::VALUE_REQUIRED,
-      'Code coverage(HTML) report directory'
-    );
-    $def->option(
-      'coverage-clover', null, InputOption::VALUE_REQUIRED,
-      'Code coverage(Clover) report directory'
-    );
-    $def->option(
-      'coverage-blacklist', 'B',
-      InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-      'Blacklist file/dir for Code coverage'
-    );
-    $def->option(
-      'coverage-whitelist', 'W',
-      InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-      'Whitelist file/dir for Code coverage'
-    );
+
+    foreach ($this->reportDir as $type => $path) {
+      $f = (in_array($type, [ 'HTML', 'XML' ])) ? 'directory' : 'file';
+      $def->option(
+        'coverage-'. strtolower($type), null,
+        InputOption::VALUE_REQUIRED,
+        "Code coverage({$type}) report {$f}"
+      );
+    }
+
+    foreach ([ 'Black', 'White' ] as $bw) {
+      $def->option(
+        'coverage-'. strtolower($bw). 'list', substr($bw, 0, 1),
+        InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+        "{$bw}list file/dir for Code coverage"
+      );
+    }
+
     $def->getArgument('path')->setDefault('specs');
   }
 
@@ -101,7 +105,7 @@ class CodeCoverage {
   public function onPeridotExecute(InputInterface $input, OutputInterface $output) {
     $cov = false;
     foreach ($this->reportDir as $type => $path) {
-      $dir = $input->getOption("coverage-${type}");
+      $dir = $input->getOption('coverage-'. strtolower($type));
       if (! empty($dir)) {
         $cov = true;
         $this->reportDir[$type] = $dir;
@@ -124,19 +128,15 @@ class CodeCoverage {
       $this->filter->addDirectoryToBlacklist($bl);
     }
 
-    foreach ($input->getOption("coverage-blacklist") as $bl) {
-      if (is_dir($bl)) {
-        $this->filter->addDirectoryToBlacklist($bl);
-      } else if (file_exists($bl)) {
-        $this->filter->addFileToBlacklist($bl);
-      }
-    }
-
-    foreach ($input->getOption("coverage-whitelist") as $wl) {
-      if (is_dir($wl)) {
-        $this->filter->addDirectoryToWhitelist($wl);
-      } else if (file_exists($wl)) {
-        $this->filter->addFileToWhitelist($wl);
+    foreach ([ 'Black', 'White' ] as $bw) {
+      $addDir = "addDirectoryTo{$bw}list";
+      $addFile = "addFileTo{$bw}list";
+      foreach ($input->getOption('coverage-'. strtolower($bw). 'list') as $bwl) {
+        if (is_dir($bwl)) {
+          $this->filter->$addDir($bwl);
+        } else if (file_exists($bwl)) {
+          $this->filter->$addFile($bwl);
+        }
       }
     }
 
@@ -160,14 +160,12 @@ class CodeCoverage {
     if (! $this->coverage) { return; }
     $this->coverage->stop();
 
-    if (! empty($this->reportDir['html'])) {
-      $writer = new \PHP_CodeCoverage_Report_HTML();
-      $writer->process($this->coverage, $this->reportDir['html']);
-    }
-
-    if (! empty($this->reportDir['clover'])) {
-      $writer = new \PHP_CodeCoverage_Report_Clover();
-      $writer->process($this->coverage, $this->reportDir['clover']. '/clover.xml');
+    foreach ($this->reportDir as $type => $path) {
+      if (empty($path)) { continue; }
+      $class = '\PHP_CodeCoverage_Report_'. $type;
+      $writer = new $class();
+      $ret = $writer->process($this->coverage, $path);
+      if ($type === 'Text') { echo $ret; }
     }
   }
 }

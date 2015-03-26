@@ -6,7 +6,7 @@ use Peridot\Core\Suite;
 use Peridot\Runner\Context;
 use Peridot\Core\TestInterface;
 
-class SpecReporter extends \Peridot\Reporter\SpecReporter {
+class FaceReporter extends \Peridot\Reporter\SpecReporter {
   /**
    * Initialize reporter. Setup and listen for runner events
    *
@@ -15,7 +15,7 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
   public function init() {
     $this->symbols['check'] = '( ^-^)b';
     $this->symbols['warning'] = '(/-_-)/';
-    $this->symbols['error'] = '(>\'A`)>';
+    $this->symbols['error'] = "(>'A`)>";
     $this->colors['file'] = ['left' => "\033[33m", 'right' => "\033[39m"];
     parent::init();
   }
@@ -50,7 +50,8 @@ class SpecReporter extends \Peridot\Reporter\SpecReporter {
     ));
 
     $message = sprintf(
-      "     %s", str_replace(PHP_EOL, PHP_EOL. "     ", $this->convertEncoding($exception->getMessage()))
+      "     %s",
+      str_replace(PHP_EOL, PHP_EOL. "     ", $this->convertEncoding($exception->getMessage()))
     );
     $this->output->writeln($this->color('error', $message));
     $this->output->writeln('');

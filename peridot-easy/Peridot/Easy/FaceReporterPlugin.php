@@ -5,13 +5,13 @@ use Evenement\EventEmitterInterface;
 use Peridot\Reporter\ReporterFactory;
 use Symfony\Component\Console\Input\InputInterface;
 
-require_once(__DIR__. '/SpecReporter.php');
+require_once(__DIR__. '/FaceReporter.php');
 
 /**
- * This plugin registers the Easy\SpecReporter with Peridot
- * @package Peridot\Easy\SpecReporter
+ * This plugin registers the Easy\FaceReporter with Peridot
+ * @package Peridot\Easy\FaceReporter
  */
-class SpecReporterPlugin {
+class FaceReporterPlugin {
   /**
    * @var EventEmitterInterface
    */
@@ -33,7 +33,7 @@ class SpecReporterPlugin {
     $reporters->register(
       'face',
       'comical face spec reporter on gulp-peridot-easy',
-      'Peridot\Easy\SpecReporter'
+      'Peridot\Easy\FaceReporter'
     );
   }
 }
